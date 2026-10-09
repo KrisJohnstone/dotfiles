@@ -1,0 +1,12 @@
+aws() {
+    local -a docker_args=(--rm -i)
+    if [[ -t 0 && -t 1 ]]; then
+        docker_args+=(-t)
+    fi
+
+    docker run "${docker_args[@]}" \
+        --mount "type=bind,source=$HOME/.aws,target=/root/.aws" \
+        --mount "type=bind,source=$PWD,target=/aws" \
+        --workdir /aws \
+        public.ecr.aws/aws-cli/aws-cli:latest "$@"
+}
